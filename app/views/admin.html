@@ -1,0 +1,89 @@
+#{extends 'main.html'/}
+  <body> 
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="/Application/index">ISA</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item">
+	        <a class="nav-link" href="/cinemas/list">Bioskopi <span class="sr-only">(current)</span></a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="/movies/list">Filmovi</a>
+	      </li>
+	       <li class="nav-item">
+	        <a class="nav-link" href="/theatres/list">Pozorista</a>
+	      </li>
+	       <li class="nav-item">
+	        <a class="nav-link" href="/performances/list">Predstave</a>
+	      </li>
+	    </ul>
+	  </div>
+	  
+		<div class="navbar-header">
+			#{if session.get("user") != null}
+      			<a href="@{Users.logout()}" class="btn btn-outline-primary">Logout</a>
+     		 #{/if}
+		</div>
+	</nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="@{Cinemas.show("edit")}">
+                  <span data-feather="home"></span>
+                  Cinemas <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{Movies.show("edit")}">
+                  <span data-feather="file"></span>
+                  Movies
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{ProjectionDates.show("edit")}">
+                  <span data-feather="shopping-cart"></span>
+                  Dates
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{Repertoires.show("edit")}">
+                  <span data-feather="shopping-cart"></span>
+                  Cinema Repertoires
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{Theatres.show("edit")}">
+                  <span data-feather="shopping-cart"></span>
+                  Theatres
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{Performances.show("edit")}">
+                  <span data-feather="shopping-cart"></span>
+                  Performances
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="@{TheatreRepertoires.show("edit")}">
+                  <span data-feather="shopping-cart"></span>
+                  Theatre Repertoires
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <div class="col-md-10">
+        #{doLayout /}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

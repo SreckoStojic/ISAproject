@@ -1,0 +1,151 @@
+#{extends 'standardForm.html' /}
+#{set title:'Performances' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/Performances/remove?id='+id);
+}
+
+function sync(item){
+    var title = item.find(".title").html();
+    var genre = item.find(".genre").html();
+    var id = item.find(".id").html();
+    var duration = item.find(".duration").html();
+    var director = item.find(".director").html();
+    var description = item.find(".description").html();
+    var price = item.find(".price").html();
+    $("#performance_id").val(id);
+    $("#performance_title").val(title);
+    $("#performance_genre").val(genre);
+    $("#performance_duration").val(duration);
+    $("#performance_description").val(description);
+    $("#performance_director").val(director);
+    $("#performance_price").val(price);
+    
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{Performances.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Performances</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Title</th>
+	   <th>Genre</th>
+	   <th>Duration</th>
+	   <th>Director</th>
+	   <th>Price</th>
+	   <th>Description</th>	
+	</tr>
+	#{list items:performances, as:'performance'}
+	<tr>
+		<td class = "title">${performance.title}</td>
+		<td class = "genre">${performance.genre}</td>
+		<td class = "duration">${performance.duration}</td>
+		<td class = "director">${performance.director}</td>
+		<td class = "price">${performance.price}</td>
+		<td class = "description">${performance.description}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${performance.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{Performances.create()}
+    #{/if}
+    #{else}
+        @{Performances.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" enctype="multipart/form-data"	 method="post" class="form-horizontal">
+					#{field 'performance.id'}
+					<input type = "hidden" name = "${field.name}" id = "performance_id"/>
+					#{/}
+					<div class="form-group">
+					#{field 'performance.title'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Title</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "performance_title" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.genre'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Genre</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "performance_genre" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.duration'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Duration</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "performance_duration" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.director'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Director</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "performance_director" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.price'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Price</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "performance_price" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.description'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Description</label>
+						<div class="col-sm-9">
+							<textarea rows="4" cols="70" type = "text" name = "${field.name}" id = "performance_description" class="form-control">
+							</textarea>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'performance.posterFile'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Poster</label>
+						<div class="col-sm-9">
+						<input type = "file" name = "${field.name}" id = "performance_poster" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+							<a href = "#">Rollback</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

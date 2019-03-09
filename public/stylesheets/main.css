@@ -1,0 +1,123 @@
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table,th,td {
+	border: 1px solid black;
+}
+
+table tr.highlighted {
+	background: yellow;
+}
+/*
+div.panel{
+	margin-top:2em;
+	border:solid 1px;
+}*/
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+}
+
+
+
+.form-wrapper {
+	width: 500px;
+}
+
+.form-wrapper form {
+	width: 100%;
+}
+
+#main-container {
+	margin-top: 65px;
+}
+
+.list-group.list-group-root {
+	padding: 0;
+	overflow: hidden;
+}
+
+.list-group.list-group-root .list-group {
+	margin-bottom: 0;
+}
+
+.list-group.list-group-root .list-group-item {
+	border-radius: 0;
+	border-width: 1px 0 0 0;
+}
+
+.list-group.list-group-root>.list-group-item:first-child {
+	border-top-width: 0;
+}
+
+.list-group.list-group-root>.list-group>.list-group-item {
+	padding-left: 30px;
+}
+
+.list-group.list-group-root>.list-group>.list-group>.list-group-item {
+	padding-left: 45px;
+}
+
+.list-group-item .glyphicon {
+	margin-right: 5px;
+}
+
+.list-items{
+	margin-top: 40px;
+}
+
+.list-items li {
+	border-bottom: 1px solid #333;
+	position: relative;
+}
+
+.list-items li:first-child{
+	border-top: 1px solid #333;
+}
+
+.list-items li > div {
+	display: inline-table;
+}
+
+.list-items li .movie {
+	padding: 20px;
+	
+}
+
+.list-items .details {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.list-items .poster {
+	width: 150px;
+	height: 200px;
+	padding: 10px;
+}
+
+.list-items .poster img {
+	max-width: 100%;
+	max-heigth: 100%;
+	margin: auto;
+}
+
+.action-buttons {
+	border-bottom: 1px solid #333;
+	background-color: #345;
+}
+.action-buttons li{
+	float: left;
+	padding: 15px;
+}

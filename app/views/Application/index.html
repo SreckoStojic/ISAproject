@@ -1,0 +1,38 @@
+#{extends 'main.html'/} #{set 'func'} #{if val == 'ADMIN'}
+@{Application.admin()} #{/if} #{else mode == 'seats'} @{Users.show()}
+#{/else} #{/set}
+<section class="jumbotron text-center">
+	
+	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Internet Softverske Arhitekture</h5>
+      <a class="btn btn-outline-primary" href="${func}">${val}</a>
+      #{if session.get("user") != null}
+      <a href="@{Users.logout()}" class="btn btn-outline-primary">Logout</a>
+      #{/if}
+    </div>
+
+	<div class="container">
+		<div class="row" style="margin-top: 140px">
+			<div class="row"
+				style="width: 500px; margin-left: auto; margin-right: auto">
+				<div class="col-sm-6">
+					<a href="/cinemas/list"> <img width="200" height="200"
+						border="2" align="center" src="/public/images/bioskop.jpg" />
+					</a>
+					<div style="margin-top: 5px">
+						<a href="/cinemas/list" class="btn btn-primary my-2">Bioskopi</a>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<a href="/theatres/list"> <img width="200" height="200"
+						border="2" align="center" src="/public/images/pozoriste.jpg" />
+					</a>
+					<div style="margin-top: 5px">
+						<a href="/theatres/list" class="btn btn-secondary my-2">Pozorista</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+

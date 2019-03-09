@@ -1,0 +1,54 @@
+#{extends '/Application/navbar.html'/}
+<script>
+	$(document).ready(function(){
+		$("#movieRate").rating().on("rating:change", function(event, value, caption) {
+	        $.ajax({
+	        	  type: "POST",
+	        	  url: "/movies/storeRate",
+	        	  data: {
+	        		  movieRate : {
+	        			  movie : {
+	        				  id : ${movie.id}
+	        			  },
+	        			  rate : value
+	        		  }
+	        	  },
+	        	  success: function(result){
+	        		  $("#movieRate").rating("update", result);
+	        	  }
+	        	});
+	    });
+	});
+</script>
+
+<div class="container">
+	<h1>${movie.title}</h1>
+	<div class="rate">
+		<label for="movieRate" class="control-label">Oceni Film:</label>
+		<input id="movieRate" name="movieRate" class="rating rating-loading" 
+		data-min="0" 
+		data-max="5" 
+		data-step="1" 
+		data-show-caption="false" 
+		data-show-clear="false" 
+		#{if session.get("user") == null}
+		data-readonly="true"
+		#{/if}
+		value="${movie.calculateAverageRate()}"
+		data-size="xs"
+		>
+	</div>
+	<div class="poster">
+				<img alt="" src="${movie.getPosterPath()}">
+			</div>
+	<div class="cinema-details">
+		<p>Zanr : ${movie.genre}<br>
+		   Trajanje : ${movie.duration} mins <br>
+		   Reditelj : ${movie.director} <br>
+		   <b>Cena</b> : ${movie.price} RSD 
+		</p>
+		<p>
+		  Opis filma: <br> ${movie.description}
+		</p>
+	</div>
+</div>

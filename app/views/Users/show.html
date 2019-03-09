@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+	function searchCinemas() {
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("search_cinemas");
+		filter = input.value.toUpperCase();
+		ul = document.getElementById("list_cinemas");
+		li = ul.getElementsByTagName("li");
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("p")[0];
+			if (a.innerHTML.toUpperCase().startsWith(filter)) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none";
+
+			}
+		}
+	}
+
+	function searchTheaters() {
+		var input, filter, table, tr, td, i;
+		input = document.getElementById("search_theaters");
+		filter = input.value.toUpperCase();
+		ul = document.getElementById("list_theaters");
+		li = ul.getElementsByTagName("li");
+		for (i = 0; i < li.length; i++) {
+			a = li[i].getElementsByTagName("p")[0];
+			if (a.innerHTML.toUpperCase().startsWith(filter)) {
+				li[i].style.display = "";
+			} else {
+				li[i].style.display = "none";
+
+			}
+		}
+	}
+
+	function sortCinemasEval() {
+		alert("hi");
+	}
+	function sortTheatresEval() {
+
+	}
+
+	function sortCinemasDist() {
+
+	}
+	function sortTheatresDist() {
+
+	}
+	$(function() {
+
+		$('#home-form-link').click(function(e) {
+			$("#home-form").delay(100).fadeIn(100);
+			$("#cinemas-form").fadeOut(100);
+			$('#cinemas-form-link').removeClass('active');
+			$("#theathers-form").fadeOut(100);
+			$('#theathers-form-link').removeClass('active');
+			$("#settings-form").fadeOut(100);
+			$('#settings-form-link').removeClass('active');
+			$("#friends-form").fadeOut(100);
+			$('#friends-form-link').removeClass('active');
+			$("#reservations-form").fadeOut(100);
+			$('#reservations-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#cinemas-form-link').click(function(e) {
+			$("#cinemas-form").delay(100).fadeIn(100);
+			$("#home-form").fadeOut(100);
+			$('#home-form-link').removeClass('active');
+			$("#theathers-form").fadeOut(100);
+			$('#theathers-form-link').removeClass('active');
+			$("#settings-form").fadeOut(100);
+			$('#settings-form-link').removeClass('active');
+			$("#friends-form").fadeOut(100);
+			$('#friends-form-link').removeClass('active');
+			$("#reservations-form").fadeOut(100);
+			$('#reservations-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#theathers-form-link').click(function(e) {
+			$("#theathers-form").delay(100).fadeIn(100);
+			$("#home-form").fadeOut(100);
+			$('#home-form-link').removeClass('active');
+			$("#cinemas-form").fadeOut(100);
+			$('#cinemas-form-link').removeClass('active');
+			$("#settings-form").fadeOut(100);
+			$('#settings-form-link').removeClass('active');
+			$("#friends-form").fadeOut(100);
+			$('#friends-form-link').removeClass('active');
+			$("#reservations-form").fadeOut(100);
+			$('#reservations-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#friends-form-link').click(function(e) {
+			$("#friends-form").delay(100).fadeIn(100);
+			$("#home-form").fadeOut(100);
+			$('#home-form-link').removeClass('active');
+			$("#theathers-form").fadeOut(100);
+			$('#theathers-form-link').removeClass('active');
+			$("#settings-form").fadeOut(100);
+			$('#settings-form-link').removeClass('active');
+			$("#cinemas-form").fadeOut(100);
+			$('#cinemas-form-link').removeClass('active');
+			$("#reservations-form").fadeOut(100);
+			$('#reservations-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#reservations-form-link').click(function(e) {
+			$("#reservations-form").delay(100).fadeIn(100);
+			$("#home-form").fadeOut(100);
+			$('#home-form-link').removeClass('active');
+			$("#cinemas-form").fadeOut(100);
+			$('#cinemas-form-link').removeClass('active');
+			$("#settings-form").fadeOut(100);
+			$('#settings-form-link').removeClass('active');
+			$("#friends-form").fadeOut(100);
+			$('#friends-form-link').removeClass('active');
+			$("#theathers-form").fadeOut(100);
+			$('#theathers-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#settings-form-link').click(function(e) {
+			$("#settings-form").delay(100).fadeIn(100);
+			$("#home-form").fadeOut(100);
+			$('#home-form-link').removeClass('active');
+			$("#cinemas-form").fadeOut(100);
+			$('#cinemas-form-link').removeClass('active');
+			$("#theathers-form").fadeOut(100);
+			$('#theathers-form-link').removeClass('active');
+			$("#friends-form").fadeOut(100);
+			$('#friends-form-link').removeClass('active');
+			$("#reservations-form").fadeOut(100);
+			$('#reservations-form-link').removeClass('active');
+			$(this).addClass('active');
+			e.preventDefault();
+		});
+		$('#sort_cin_eval_acc').click(function(e) {
+			$("#list_cinemas li").sort(sort_li).appendTo('#list_cinemas');
+			function sort_li(a, b) {
+				return ($(b).data('eval')) < ($(a).data('eval')) ? 1 : -1;
+
+			}
+		});
+
+		$('#sort_cin_eval_dec').click(function(e) {
+			$("#list_cinemas li").sort(sort_li).appendTo('#list_cinemas');
+			function sort_li(a, b) {
+				return ($(b).data('eval')) < ($(a).data('eval')) ? -1 : 1;
+			}
+		});
+
+		$('#sort_theatre_eval_acc').click(function(e) {
+			$("#list_theaters li").sort(sort_li).appendTo('#list_theaters');
+			function sort_li(a, b) {
+				return ($(b).data('eval')) < ($(a).data('eval')) ? 1 : -1;
+
+			}
+		});
+
+		$('#sort_theatre_eval_dec').click(function(e) {
+			$("#list_theaters li").sort(sort_li).appendTo('#list_theaters');
+			function sort_li(a, b) {
+				return ($(b).data('eval')) < ($(a).data('eval')) ? -1 : 1;
+			}
+		});
+	});
+</script>
+<style type="text/css">
+.list-group-horizontal .list-group-item {
+	display: inline-block;
+}
+
+.list-group-horizontal .list-group-item {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+}
+
+.list-group-horizontal .list-group-item:first-child {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+}
+
+.list-group-horizontal .list-group-item:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+
+
+		<div class="col-md-8 col-md-offset-3">
+			<div class="row" style="padding-top: 50px">
+
+				<div class="list-group list-group-horizontal">
+					<a href="@{Application.index()}" class="list-group-item" id="index">ISA</a>
+					<a href="#" class="active list-group-item" id="home-form-link">Home</a>
+					<a href="#" id="cinemas-form-link" class="list-group-item">Cinemas</a>
+					<a href="#" id="theathers-form-link" class="list-group-item">Theathers</a>
+					<a href="#" id="friends-form-link" class="list-group-item">Friends</a>
+					<a href="#" id="reservations-form-link" class="list-group-item">Reservations</a>
+					<a href="#" id="settings-form-link" class="list-group-item">Settings</a>
+
+					<a href="@{Users.logout()}" id="settings-form-link"
+						class="list-group-item">Logout</a>
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-10">
+							<div id="home-form" style="display: block;">
+								<div class="pull-left">
+									<div class="pull-left">
+										<img width=100px height=100px
+											src="@{'/public/images/user_logo.jpg'}" />
+									</div>
+									<div class="pull-right">
+										<b>${user.firstName}</b> <br> <b>${user.lastName}</b> <br>
+										${user.email} <br> ${user.phone} <br> ${user.city}
+									</div>
+								</div>
+								<div class="pull-right">
+
+
+									<form class="form-inline my-2 my-lg-0">
+										<input class="form-control mr-sm-2" type="search"
+											placeholder="Search" aria-label="Search">
+										<button class="btn btn-outline-success my-2 my-sm-0"
+											type="submit">Search</button>
+									</form>
+
+									<div class="row">
+										<table class="table table-bordered">
+											<tr class="header">
+												<th>History of visits</th>
+											</tr>
+											<tr>
+												<td class="name">Ime bioskopa</td>
+											</tr>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<form id="cinemas-form" style="display: none;"
+								class="form-inline my-2 my-lg-0">
+								<h1>Cinemas</h1>
+								Sort by stars: <a href="#" id="sort_cin_eval_acc"><img
+									width=20px height=20px src="@{'/public/images/down.png'}""></a>
+								<a href="#" id="sort_cin_eval_dec"><img width=20px
+									height=20px src="@{'/public/images/up.png'}""></a> &nbsp;
+								&nbsp; Sort by distance: <a href="#" id="sort_cin_dist_acc"><img
+									width=20px height=20px src="@{'/public/images/down.png'}""></a>
+								<a href="#" id="sort_cin_dist_dec"><img width=20px
+									height=20px src="@{'/public/images/up.png'}""></a>&nbsp;
+								&nbsp; <input type="hidden" id="sort_cin_eval_click_dec"
+									value="0" /> <input class="form-control mr-sm-2" type="search"
+									placeholder="Search" aria-label="Search" id="search_cinemas"
+									onkeyup="searchCinemas()">
+
+
+								<ul class="list-items" id="list_cinemas">
+									#{list items:cinemas, as:'cinema'}
+									<li data-eval="${cinema.calculateAverageRate()}">
+										<div>
+											<h2>
+												<p>${cinema.name}</p>
+											</h2>
+											<h3>${cinema.calculateAverageRate()}</h3>
+											<p>
+												Address: ${cinema.address}<br> City: ${cinema.city}
+											</p>
+											<p>Details: ${cinema.description}</p>
+										</div>
+									</li> #{/list}
+								</ul>
+							</form>
+
+							<div id="theathers-form" style="display: none;">
+								<h1>Theatres</h1>
+
+								Sort by stars: <a href="#" id="sort_theatre_eval_acc"><img
+									width=20px height=20px src="@{'/public/images/down.png'}""></a>
+								<a href="#" id="sort_theatre_eval_dec"><img width=20px
+									height=20px src="@{'/public/images/up.png'}""></a> &nbsp;
+								&nbsp; Sort by distance: <a href="#" id="sort_theatre_dist_acc"><img
+									width=20px height=20px src="@{'/public/images/down.png'}""></a>
+								<a href="#" id="sort_theatre_dist_dec"><img width=20px
+									height=20px src="@{'/public/images/up.png'}""></a>&nbsp;
+								&nbsp; <input class="form-control mr-sm-2" type="search"
+									placeholder="Search" aria-label="Search" id="search_cinemas"
+									onkeyup="searchTheaters()">
+								<ul class="list-items" id="list_theaters">
+									#{list theatres, as:'theatre'}
+									<li data-eval="${theatre.eval}">
+										<div>
+											<h2>${theatre.name}</h2>
+											<h3>${theatre.eval}</h3>
+											<p>
+												Address: ${theatre.address}<br> City: ${theatre.city}
+											</p>
+										</div>
+									</li> #{/list}
+								</ul>
+							</div>
+
+							<form id="friends-form" action="" method="post" role="form"
+								style="display: none;">
+								<h1>Friends</h1>
+							</form>
+
+							<div id="reservations-form" style="display: none;">
+
+								<div class="pull-left">
+									<a class="nav-link active" href="@{Reservations.show()}"> <span
+										data-feather="home"></span> Make new movie reservations <span
+										class="sr-only">(current)</span>
+									</a><br> <br> List of booked movie reservations:
+									<ul class="list-items">
+										#{list items:activeReservations, as:'activeReservation'}
+										<li>
+											<div>
+												<h2>${activeReservation.projection.movie.title}</h2>
+												<p>
+													Cinema:
+													${activeReservation.projection.auditorium.cinema.name}<br>
+													Address:
+													${activeReservation.projection.auditorium.cinema.address}<br>
+													Price: ${activeReservation.projection.projectionTime.price}<br>
+													Seat: row ${activeReservation.seat.row} number ${activeReservation.seat.number}
+												</p>
+											</div>
+											<div class="cancel">
+												<a href="/users/cancel?id=${activeReservation.id}"
+													class="btn btn-primary">Cancel</a>
+											</div>
+										</li> #{/list} #{list items:reservations, as:'reservation'}
+										<li>
+											<div>
+												<h2>${reservation.projection.movie.title}</h2>
+												<p>
+													Cinema: ${reservation.projection.auditorium.cinema.name}<br>
+													Address:
+													${reservation.projection.auditorium.cinema.address}<br>
+													Price: ${reservation.projection.projectionTime.price}<br>
+													Seat: row ${reservation.seat.row} number ${activeReservation.seat.number}
+												</p>
+											</div>
+										</li> #{/list}
+									</ul>
+								</div>
+								<div class="pull-right">
+									<a class="nav-link" href="@{TheatreReservations.show()}"> <span
+										data-feather="file"></span> Make new performance reservations
+									</a><br> <br> List of booked performance reservations :
+									<ul class="list-items">
+										#{list items:activeTheatreReservations,
+										as:'activeTheatreReservation'}
+										<li>
+											<div>
+												<h2>${activeTheatreReservation.projection.movie.title}</h2>
+												<p>
+													Cinema:
+													${activeTheatreReservation.projection.auditorium.cinema.name}<br>
+													Address:
+													${activeTheatreReservation.projection.auditorium.cinema.address}<br>
+													Price:
+													${activeTheatreReservation.projection.projectionTime.price}<br>													
+													Seat: row ${activeTheatreReservation.seat.row} number ${activeTheatreReservation.seat.number}
+												</p>
+											</div>
+											<div class="cancel">
+												<a
+													href="/users/cancelTheatreid=${activeTheatreReservation.id}"
+													class="btn btn-primary">Cancel</a>
+											</div>
+										</li> #{/list} #{list items:theatreReservations,
+										as:'theatreReservation'}
+										<li>
+											<div>
+												<h2>${theatreReservation.projection.movie.title}</h2>
+												<p>
+													Cinema:
+													${theatreReservation.projection.auditorium.cinema.name}<br>
+													Address:
+													${theatreReservation.projection.auditorium.cinema.address}<br>
+													Price:
+													${theatreReservation.projection.projectionTime.price}<br>				
+													Seat: row ${theatreReservation.seat.row} number ${theatreReservation.seat.number}
+												</p>
+											</div>
+										</li> #{/list}
+									</ul>
+								</div>
+							</div>
+
+
+							<form id="settings-form" action="@{Users.edit()}" method="post"
+								role="form" style="display: none;">
+
+								<div class="pull-left">
+									<img width=100px height=100px
+										src="@{'/public/images/user_logo.jpg'}" />
+								</div>
+								<div class="pull-right">
+									#{field 'user.id'} <input type="hidden" name="${field.name}"
+										id="id" value="${user.id}" /> #{/}
+									<div class="form-group">
+										#{field 'user.username'} <input type="text"
+											name="${field.name}" id="username" tabindex="1"
+											class="form-control" placeholder="Username"
+											value="${user.username}"> #{/}
+									</div>
+									<div class="form-group">
+										#{field 'user.email'} <input type="email" name="${field.name}"
+											id="email" tabindex="1" class="form-control"
+											placeholder="Email Address" value="${user.email}">
+										#{/}
+									</div>
+									<div class="form-group">
+										#{field 'user.firstName'} <input type="text"
+											name="${field.name}" id="firstName" tabindex="1"
+											class="form-control" placeholder="First name"
+											value="${user.firstName}"> #{/}
+									</div>
+									<div class="form-group">
+										#{field 'user.lastName'} <input type="text"
+											name="${field.name}" id="lastName" tabindex="1"
+											class="form-control" placeholder="Last name"
+											value="${user.lastName}"> #{/}
+									</div>
+									<div class="form-group">
+										#{field 'user.city'} <input type="text" name="${field.name}"
+											id="city" tabindex="1" class="form-control"
+											placeholder="City" value="${user.city}"> #{/}
+									</div>
+									<div class="form-group">
+										#{field 'user.phone'} <input type="text" name="${field.name}"
+											id="city" tabindex="1" class="form-control"
+											placeholder="Phone" value="${user.phone}"> #{/}
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="row">
+										<div class="col-sm-6 col-sm-offset-3">
+											<input type="submit" name="submit" id="submit" tabindex="4"
+												class="form-control btn btn-register" value="Save changes">
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

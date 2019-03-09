@@ -1,0 +1,108 @@
+#{extends 'standardForm.html' /}
+#{set title:'Theatre Repertoire' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/TheatreRepertoires/remove?id='+id);
+}
+
+function sync(item){
+    var performance_ids = JSON.parse(item.find(".performance_ids").html());
+    var id = item.find(".id").html();
+    var theatre_id = item.find(".theatre_id").html();
+    console.log(performance_ids);
+    $("#theatreRepertoire_performances_id").val(performance_ids);
+    $("#theatreRepertoire_id").val(id);
+    $("#theatreRepertoire_theatre_id").val(theatre_id);
+}
+
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{TheatreRepertoires.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Theatre Repertoires</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Theatre</th>
+	   <th>Performances</th>
+	</tr>
+	#{list items:theatreRepertoires, as:'theatreRepertoire'}
+	<tr>
+		<td class = "name">${theatreRepertoire.theatre.name}</td>
+		<td class = "performances">
+			#{list items:theatreRepertoire.performances, as:'performance'}
+				<a class="btn btn-primary btn-sm" href="/TheatreProjections/show?rep_id=${theatreRepertoire.id}&performance_id=${performance.id}" target="_blank">${performance.title}</a>
+			#{/list}
+		</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${theatreRepertoire.id}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "theatre_id">${theatreRepertoire.theatre.id}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "performance_ids">${theatreRepertoire.performances.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{TheatreRepertoires.create()}
+    #{/if}
+    #{else}
+        @{TheatreRepertoires.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" method="post" class="form-horizontal">
+					#{field 'theatreRepertoire.id'}
+					<input type = "hidden" name = "${field.name}" id = "theatreRepertoire_id"/>
+					#{/}
+					<div class="form-group">
+					#{field 'theatreRepertoire.theatre.id'}
+						<label for="theatreRepertoire_theatre_id" class="col-sm-3 control-label">Theatre</label>
+						<div class="col-sm-7">
+							<select name="theatre_id" id = "theatreRepertoire_theatre_id" />
+							#{list items:theatres, as:'theatre'}
+							<option value = "${theatre.id}">${theatre.name}</option>
+							#{/list}
+							</select>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatreRepertoire.performances.id'}
+					    <label for="theatreRepertoire_performances_id" class="col-sm-3 control-label">Performances</label>
+					    <div class="col-md-7">
+					    	<select multiple name="performance_ids"  id="theatreRepertoire_performances_id">
+					      		#{list items:performances, as:'performance'}
+									<option value = "${performance.id}">${performance.title}</option>
+								#{/list}
+					    	</select>
+					    </div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

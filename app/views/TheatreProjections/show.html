@@ -1,0 +1,147 @@
+#{extends 'standardForm.html' /}
+#{set title:'TheatreProjections' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/TheatreProjections/remove?id='+id);
+}
+
+function sync(item){
+    var id = item.find(".id").html();
+    var auditorium = item.data('aud-id');
+    var dateId = item.data('date-id');
+    var timeId = item.data('time-id');
+    var price = item.find(".price").html();
+    $("#proj_id").val(id);
+    $("#proj_aud_id").val(auditorium);
+    $("#proj_date_id").val(dateId);
+    $("#proj_date_id").trigger('change');
+    $("#proj_time_id").val(timeId);
+    $("#proj_time_price").val(price);
+    
+}
+
+$(document).ready(function() {
+	$('#proj_date_id').on('change', function(e) {
+		var dateId = $(this).val();
+		var times = $(this).find('option[value='+dateId+']').data('times');
+		var options = times.map(function(t) {
+			return '<option value="' + t.id + '">' + t.time + '</option>';
+		});
+		
+		$('#proj_time_id').html(options);
+	});	
+});
+
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{TheatreProjections.show("add", rep_id, performance_id)}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Theatre Projections</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Date</th>
+	   <th>Time</th>
+	   <th>Auditorium</th>
+	   <th>Price</th>
+	</tr>
+	#{list items:theatreProjections, as:'theatreProjection'}
+	<tr data-date-id="${theatreProjection.projectionDate.id}" data-time-id="${theatreProjection.projectionTime.id}" data-aud-id="${theatreProjection.theatreAuditorium.id}">
+		<td class = "date">${theatreProjection.projectionDate.date}</td>
+		<td class = "time">${theatreProjection.projectionTime.time}</td>
+		<td class = "auditorium">${theatreProjection.theatreAuditorium.name}</td>
+		<td class = "price">${theatreProjection.projectionTime.price}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${theatreProjection.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{TheatreProjections.create()}
+    #{/if}
+    #{else}
+        @{TheatreProjections.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" enctype="multipart/form-data"	 method="post" class="form-horizontal">
+					#{field 'theatreProjection.id'}
+					<input type = "hidden" name = "${field.name}" id = "proj_id"/>
+					#{/}
+					#{field 'theatreProjection.theatreRepertoire.id'}
+					<input type = "hidden" name = "${field.name}" id = "proj_repertoire_id" value="${rep_id}" />
+					#{/}
+					#{field 'theatreProjection.performance.id'}
+					<input type = "hidden" name = "${field.name}" id = "proj_performance_id" value="${performance_id}" />
+					#{/}
+					<div class="form-group">
+					#{field 'theatreProjection.projectionDate.id'}
+						<label for = "proj_date_id" class="col-sm-3 control-label">Theatre Projection Date</label>
+						<div class="col-sm-6">
+							<select name = "${field.name}" id = "proj_date_id" class="form-control"/>
+							#{list items:projectionDates, as:'projectionDate'}
+							<option value = "${projectionDate.id}" data-times="${projectionDate.getProjectionTimesJSON()}">${projectionDate.date}</option>
+							#{/list}
+							</select>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatreProjection.projectionTime.id'}
+						<label for = "proj_time_id" class="col-sm-3 control-label">Projection Time</label>
+						<div class="col-sm-6">
+							<select name = "${field.name}" id = "proj_time_id" class="form-control"/></select>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatreProjection.theatreAuditorium.id'}
+						<label for = "proj_aud_id" class="col-sm-3 control-label">Theatre Auditorium</label>
+						<div class="col-sm-6">
+							<select name = "${field.name}" id = "proj_aud_id" class="form-control"/>
+							#{list items:theatreAuditoriums, as:'theatreAuditorium'}
+							<option value = "${theatreAuditorium.id}">${theatreAuditorium.name}</option>
+							#{/list}
+							</select>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatreProjection.projectionTime.price'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Price</label>
+						<div class="col-sm-6">
+							<input type = "text" name = "${field.name}" id = "proj_time_price" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+							<a href = "#">Rollback</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+					

@@ -1,0 +1,53 @@
+#{extends '/Application/navbar.html'/}
+<script>
+	$(document).ready(function(){
+		$("#performanceRate").rating().on("rating:change", function(event, value, caption) {
+	        $.ajax({
+	        	  type: "POST",
+	        	  url: "/performances/storeRate",
+	        	  data: {
+	        		  performanceRate : {
+	        			  performance : {
+	        				  id : ${performance.id}
+	        			  },
+	        			  rate : value
+	        		  }
+	        	  },
+	        	  success: function(result){
+	        		  $("#performanceRate").rating("update", result);
+	        	  }
+	        	});
+	    });
+	});
+</script>
+<div class="container">
+	<h1>${performance.title}</h1>
+	<div class="rate">
+		<label for="performanceRate" class="control-label">Oceni Predstavu:</label>
+		<input id="performanceRate" name="performanceRate" class="rating rating-loading" 
+		data-min="0" 
+		data-max="5" 
+		data-step="1" 
+		data-show-caption="false" 
+		data-show-clear="false" 
+		#{if session.get("user") == null}
+		data-readonly="true"
+		#{/if}
+		value="${performance.calculateAverageRate()}"
+		data-size="xs"
+		>
+	</div>
+	<div class="poster">
+				<img alt="" src="${performance.getPosterPath()}">
+			</div>
+	<div class="cinema-details">
+		<p>Zanr : ${performance.genre}<br>
+		   Trajanje : ${performance.duration} mins <br>
+		   Reditelj : ${performance.director} <br>
+		   <b>Cena</b> : ${performance.price} RSD 
+		</p>
+		<p>
+		  Opis predstave: <br> ${performance.description}
+		</p>
+	</div>
+</div>

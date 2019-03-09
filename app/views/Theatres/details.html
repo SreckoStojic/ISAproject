@@ -1,0 +1,87 @@
+#{extends '/Application/navbar.html'/}
+<script>
+	$(document).ready(function(){
+		$("#theatreRate").rating().on("rating:change", function(event, value, caption) {
+	        $.ajax({
+	        	  type: "POST",
+	        	  url: "/theatres/storeRate",
+	        	  data: {
+	        		  theatreRate : {
+	        			  theatre : {
+	        				  id : ${theatre.id}
+	        			  },
+	        			  rate : value
+	        		  }
+	        	  },
+	        	  success: function(result){
+	        		  $("#theatreRate").rating("update", result);
+	        	  }
+	        	});
+	    });
+	});
+</script>
+
+<div class="container">
+	<h1>${theatre.name}</h1>
+	<div class="rate">
+		<label for="theatreRate" class="control-label">Oceni Pozoriste:</label>
+		<input id="theatreRate" name="theatreRate" class="rating rating-loading" 
+		data-min="0" 
+		data-max="5" 
+		data-step="1" 
+		data-show-caption="false" 
+		data-show-clear="false" 
+		#{if session.get("user") == null}
+		data-readonly="true"
+		#{/if}
+		value="${theatre.calculateAverageRate()}"
+		data-size="xs"
+		>
+	</div>
+	<div class="cinema-details">
+		<p>
+		   Adresa : ${theatre.address}<br>
+		   Grad : ${theatre.city}
+		</p>
+		<p>
+		  Opis pozorista : <br>  ${theatre.description}
+		</p>
+	</div>
+	<div class="map">
+		<iframe style="border: 0" width="600" height="300" src="//www.google.com/maps/embed/v1/place?q=${(theatre.address + theatre.city).urlEncode()}&zoom=17&key=AIzaSyA79IJ_Awi_jPGHuDgu5pMdmE1q9OraaDQ">
+     	</iframe>
+	</div>
+	<h2>Repertoar</h2>
+	<div class="container">
+		<ul class="list-items">
+		#{list items:theatreRepertoire.getPerformances(), as:'performance'}
+		<li>
+			<div class="poster">
+				<img alt="" src="${movie.getPosterPath()}">
+			</div>
+			<div>
+				<h2>${performance.title}</h2>
+				<p>
+					${performance.genre}<br>
+					${performance.duration} mins
+				</p>
+			</div>
+			<div>
+				<ul>
+				#{list items:performance.getTheatreProjectionsByRepertoireId(theatreRepertoire.id), as:'theatreProjection'}
+					<li>
+					<a class="btn btn-primary btn-sm" href="#">
+						${theatreProjection.projectionDate.getFormatedDate()} (${theatreProjection.projectionTime.time})
+					</a>
+					</li>
+				#{/list}
+				</ul>
+			</div>
+			<div class="details">
+				<a href="/performances/details?id=${performance.id}" class="btn btn-primary">Detalji</a>
+			</div>
+		</li>
+		#{/list}
+	</ul>
+	</div>
+</div>

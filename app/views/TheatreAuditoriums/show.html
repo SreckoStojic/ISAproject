@@ -1,0 +1,86 @@
+#{extends 'standardForm.html' /}
+#{set title:'Theatre Auditoriums' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/TheatreAuditoriums/remove?id='+id);
+}
+
+function sync(item){
+    var name = item.find(".name").html();
+    var id = item.find(".id").html();
+    $("#theatreAuditorium_id").val(id);
+    $("#theatreAuditorium_name").val(name);    
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{TheatreAuditoriums.show("add",theatre_id)}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Theatre Auditoriums</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Name</th>
+	</tr>
+	#{list items:theatreAuditoriums, as:'theatreAuditorium'}
+	<tr>
+		<td class = "name">${theatreAuditorium.name}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${theatreAuditorium.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{TheatreAuditoriums.create()}
+    #{/if}
+    #{else}
+        @{TheatreAuditoriums.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" method="post" class="form-horizontal">
+					#{field 'theatreAuditorium.id'}
+					<input type = "hidden" name = "${field.name}" id = "theatreAuditorium_id"/>
+					#{/}
+					#{field 'theatreAuditorium.theatre.id'}
+					<input type = "hidden" name = "${field.name}" id = "aud_theatre_id" value="${theatre_id}"/>
+					#{/}
+					<div class="form-group">
+						<button class="btn btn-primary" href = "/TheatreAuditoriums/show">Pregled Sedista</button>
+					</div>						
+					<div class="form-group">
+					#{field 'theatreAuditorium.name'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Name</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "theatreAuditorium_name" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

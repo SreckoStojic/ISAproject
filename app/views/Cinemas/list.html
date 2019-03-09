@@ -1,0 +1,31 @@
+#{extends '/Application/navbar.html'/}
+<div class="container">
+<h1 class="h1">Pregled Bioskopa</h1>
+	<ul class="list-items">
+		#{list items:cinemas, as:'cinema'}
+		<li>
+			<div>
+				<h2>${cinema.name}</h2>
+				<p>
+					Adresa : ${cinema.address}<br>
+					Grad : ${cinema.city}
+				</p>
+			</div>
+			<div>
+				<input value="${cinema.calculateAverageRate()}"  class="rating rating-loading" 
+					data-min="0" 
+					data-max="5" 
+					data-step="1" 
+					data-show-caption="false" 
+					data-show-clear="false" 
+					data-readonly="true"
+					data-size="xs"
+					>
+			</div>
+			<div class="details">
+				<a href="/cinemas/details?id=${cinema.id}" class="btn btn-primary">Detalji</a>
+			</div>
+		</li>
+		#{/list}
+	</ul>
+</div>

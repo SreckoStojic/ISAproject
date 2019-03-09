@@ -1,0 +1,34 @@
+#{extends '/Application/navbar.html'/}
+<div class="container">
+<h1 class="h1">Pregled Predstava</h1>
+	<ul class="list-items">
+		#{list items:performances, as:'performance'}
+		<li>
+			<div class="poster">
+				<img alt="" src="${performance.getPosterPath()}">
+			</div>
+			<div class="performance">
+				<h2>${performance.title}</h2>
+				<p>
+					Zanr : ${performance.genre}<br>
+					Trajanje : ${performance.duration} mins
+				</p>
+			</div>
+			<div>
+				<input value="${performance.calculateAverageRate()}"  class="rating rating-loading" 
+					data-min="0" 
+					data-max="5" 
+					data-step="1" 
+					data-show-caption="false" 
+					data-show-clear="false" 
+					data-readonly="true"
+					data-size="xs"
+					>
+			</div>
+			<div class="details">
+				<a href="/performances/details?id=${performance.id}" class="btn btn-primary">Detalji</a>
+			</div>
+		</li>
+		#{/list}
+	</ul>
+</div>

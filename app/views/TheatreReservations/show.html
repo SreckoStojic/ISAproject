@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+	$(document).on("click", "#seats td", function() {
+		var column_num = parseInt($(this).index()) + 1;
+		var row_num = parseInt($(this).parent().index()) + 1;
+		var klasa = $(this).attr('class');
+		var cells = $('#theatreSeats').find("td");
+		if (klasa == "unavailable") {
+			alert("This seat is taken");
+			$('#submit_btn').prop("disabled", true);
+		} else {
+			$(this).css('background-color', '#D3D3D3');
+
+			$(this).css('background-color', '#D3D3D3');
+			$('#submit_btn').prop("disabled", false);						
+			
+			var html = "<option value="+row_num+" selected></option>"
+			$("#reservation_theatre_seats_row").append(html);
+
+			var html = "<option value="+column_num+" selected></option>"
+			$("#reservation_theatre_seats_numbers").append(html);
+			
+			$('#theatreSubmit_btn').prop("disabled", false);
+		}
+	});
+
+	$(document)
+			.ready(
+					function() {
+						$('#proj_date_id').on(
+								'change',
+								function(e) {
+									var dateId = $(this).val();
+									var times = $(this).find(
+											'option[value=' + dateId + ']')
+											.data('times');
+									var options = times.map(function(t) {
+										return '<option value="' + t.id + '">'
+												+ t.time + '</option>';
+									});
+
+									$('#proj_time_id').html(options);
+									$('#date_id').val(dateId);
+								});
+
+						$('#proj_time_id').on('change', function(e) {
+							var timeId = $(this).val();
+							$('#time_id').val(timeId);
+						});
+
+						$('#proj_performance_id').on('change', function(e) {
+							var performanceId = $(this).val();
+							$('#performance_id').val(performanceId);
+						});
+
+						$('#proj_theatre_id').on(
+								'change',
+								function(e) {
+									var theatreId = $(this).val();
+									var performances = $(this).find(
+											'option[value=' + theatreId + ']')
+											.data('performances');
+									var options = performances.map(function(t) {
+										return '<option value="' + t.id + '">'
+												+ t.title + '</option>';
+									});
+									var rep_id = performances.map(function(t) {
+										return t.theatreRepertoire_id;
+									});
+									var performance_id = performances
+											.map(function(t) {
+												return t.id;
+											});
+									$('#proj_performance_id').html(options);
+									$('#theatre_id').val(theatreId);
+								});
+
+						$('#proj_theatreAud_id')
+								.on(
+										'change',
+										function(e) {
+											var theatreAudId = $(this).val();
+											$('#theatreAud_id').val(
+													theatreAudId);
+											var obj = $(this).find(
+													'option[value='
+															+ theatreAudId
+															+ ']').data(
+													'theatreSeats');
+
+											$("#theatreSeats").empty();
+											var rows = obj.rows;
+											var cols = obj.cols;
+											var seats = obj.seats;
+											var html = '';
+											
+												var num = i + " " + j;
+											for (i = 0; i < rows; i++) {
+												html = html + "<tr>"
+												for (j = 0; j < cols; j++) {
+													
+													var num = i + " " + j;
+													if (seats[i * rows + j].available == true) {
+														html = html
+																+ "<td bgcolor='#90EE90' class='available' style='border: 1px solid black;'>"
+																+ num + "</td>"
+													} else {
+
+														html = html
+																+ "<td bgcolor='#F08080' class='unavailable' style='border: 1px solid black;'>"
+																+ num + "</td>"
+													}
+												}
+												html = html + "</tr>"
+											}
+											$("#theatreSeats").append(html);
+
+										});
+					});
+
+	function show_date() {
+
+		document.getElementById("choose_date").style.display = "block";
+		document.getElementById("choose_time").style.display = "block";
+	}
+
+	function show_seats() {
+		document.getElementById("choose_date").style.display = "block";
+		document.getElementById("choose_time").style.display = "block";
+		document.getElementById("choose_theatreAuditorium").style.display = "block";
+		document.getElementById("choose_theatreSeat").style.display = "block";
+		document.getElementById("submit_btn").disabled = true;
+	}
+</script>
+<style type="text/css">
+.list-group-horizontal .list-group-item {
+	display: inline-block;
+}
+
+.list-group-horizontal .list-group-item {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+}
+
+.list-group-horizontal .list-group-item:first-child {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+}
+
+.list-group-horizontal .list-group-item:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+}
+</style>
+</head>
+#{set 'action'} #{if mode == 'initial'} @{TheatreReservations.next()}
+#{/if} #{if mode == 'next'} @{TheatreReservations.getTheatreSeat()}
+#{/if} #{if mode == 'theatreSeats'} @{TheatreReservations.create()}
+#{/if} #{/set} #{set 'func'} #{if mode == 'next'} show_date() #{/if}
+#{if mode == 'theatreSeats'} show_theatreSeats(); #{/if} #{/set}
+<body onload="${func}">
+	<div class="container">
+
+
+		<div class="col-md-8 col-md-offset-3">
+			<div class="row" style="padding-top: 50px">
+
+				<div class="list-group list-group-horizontal">
+					<a href="@{Application.index()}" class="active list-group-item"
+						id="index">ISA</a> <a href="@{Users.show()}"
+						class="list-group-item" id="home-form-link">Profile page</a> <a
+						href="@{Users.logout()}" id="settings-form-link"
+						class="list-group-item">Logout</a>
+				</div>
+
+			</div>
+			<div class="container-fluid">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="form-wrapper row">
+							<form action="${action}" enctype="multipart/form-data"
+								method="post" class="form-horizontal">
+								<input type="hidden" name="rep_id" id="rep_id" value="${rep_id}" />
+								<input type="hidden" name="performance_id" id="performance_id"
+									value="${performance_id}" /> <input type="hidden"
+									name="date_id" id="date_id" value="${date_id}" /> <input
+									type="hidden" name="time_id" id="time_id" value="${time_id}" />
+								<input type="hidden" name="theatre_id" id="theatre_id"
+									value="${theatre_id}" /> <input type="hidden"
+									name="theatreAud_id" id="theatreAud_id"
+									value="${theatreAud_id}" />
+
+								<div class="form-group" id="choose_theatre"
+									style="display: block;">
+									#{field
+									'theatreReservation.theatreProjection.theatreAuditorium.theatre.id'}
+									<label for="proj_theatre_id" class="col-sm-3 control-label">Theatre</label>
+									<div class="col-sm-6">
+										<select name="${field.name}" id="proj_theatre_id"
+											class="form-control" /> #{list items:theatres, as:'theatre'}
+										<option value="${theatre.id}"
+											data-performances="${theatre.getPerformancesJSON()}">${theatre.name}</option>
+										#{/list} </select>
+									</div>
+									#{/}
+								</div>
+								<div class="form-group" id="choose_performance"
+									style="display: block;">
+									#{field 'theatreProjection.performance.id'} <label
+										for="proj_performance_id" class="col-sm-3 control-label">Performance</label>
+									<div class="col-sm-6">
+										<select name="${field.name}" id="proj_performance_id"
+											class="form-control" /> #{list items:performances,
+										as:'performance'}
+										<option value="${performance.id}">${performance.title}</option>
+										#{/list} </select>
+									</div>
+									#{/}
+								</div>
+								<div class="form-group" id="choose_date" style="display: none;">
+									#{field
+									'theatreReservation.theatreProjection.projectionDate.id'} <label
+										for="proj_date_id" class="col-sm-3 control-label">Date</label>
+									<div class="col-sm-6">
+										<select name="${field.name}" id="proj_date_id"
+											class="form-control" /> #{list items:projectionDates,
+										as:'projectionDate'}
+										<option value="${projectionDate.id}"
+											data-times="${projectionDate.getProjectionTimesJSON()}">${projectionDate.date}</option>
+										#{/list} </select>
+									</div>
+									#{/}
+								</div>
+								<div class="form-group" id="choose_time" style="display: none;">
+									#{field 'theatreProjection.projectionTime.id'} <label
+										for="proj_time_id" class="col-sm-3 control-label">Time</label>
+									<div class="col-sm-6">
+										<select name="${field.name}" id="proj_time_id"
+											class="form-control" /> #{list items:projectionTimes,
+										as:'projectionTime'}
+										<option value="${projectionTime.id}">${projectionTime.time}</option>
+										#{/list} </select>
+									</div>
+									#{/}
+								</div>
+								<div class="form-group" id="choose_theatreAuditorium"
+									style="display: none;">
+									#{field 'theatreProjection.theatreAuditorium.id'} <label
+										for="proj_theatreAud_id" class="col-sm-3 control-label">Theatre
+										Auditorium</label>
+									<div class="col-sm-6">
+										<select name="${field.name}" id="proj_theatreAud_id"
+											class="form-control" /> #{list items:theatreAuditoriums,
+										as:'theatreAuditorium'}
+										<option value="${theatreAuditorium.id}"
+											data-theatreSeats="${theatreAuditorium.getTheatreSeatsJSON()}">${theatreAuditorium.name}</option>
+										#{/list} </select>
+									</div>
+									#{/}
+								</div>
+
+								<div class="form-group" id="choose_theatreSeat"
+									style="display: none;">
+									<table id="theatreSeats" style="border: 1px solid black;">
+									</table>
+									<div class="col-md-7" style="display: none;">
+										<select multiple name="theatre_seat_rows" id="reservation_theatre_seats_row">
+											#{list items:theatre_seat_rows, as:'theatre_seat_row'}
+											<option value="${theatre_seat_row}"></option> 
+											#{/list}
+										</select>
+									</div>
+									<div class="col-md-7" style="display: none;">
+										<select multiple name="theatre_seat_numbers" id="reservation_theatre_seats_numbers">
+											#{list items:theatre_seat_numbers, as:'theatre_seat_number'}
+											<option value="${theatre_seat_number}"></option> 
+											#{/list}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="price" class="col-sm-3 control-label">Price</label>
+									<div class="col-sm-6">
+										<input readonly type="text" name="price" id="price"
+											class="form-control" value="${price}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<div id="formActions" class="col-sm-offset-3 col-sm-9">
+										<input type="submit" id="submit_btn" value="Next"
+											class="btn btn-default" />
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+

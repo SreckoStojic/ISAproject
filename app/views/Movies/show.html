@@ -1,0 +1,151 @@
+#{extends 'standardForm.html' /}
+#{set title:'Movies' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/Movies/remove?id='+id);
+}
+
+function sync(item){
+    var title = item.find(".title").html();
+    var genre = item.find(".genre").html();
+    var id = item.find(".id").html();
+    var duration = item.find(".duration").html();
+    var director = item.find(".director").html();
+    var description = item.find(".description").html();
+    var price = item.find(".price").html();
+    $("#movie_id").val(id);
+    $("#movie_title").val(title);
+    $("#movie_genre").val(genre);
+    $("#movie_duration").val(duration);
+    $("#movie_description").val(description);
+    $("#movie_director").val(director);
+    $("#movie_price").val(price);
+    
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{Movies.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Movies</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Title</th>
+	   <th>Genre</th>
+	   <th>Duration</th>
+	   <th>Director</th>
+	   <th>Price</th>
+	   <th>Description</th>	
+	</tr>
+	#{list items:movies, as:'movie'}
+	<tr>
+		<td class = "title">${movie.title}</td>
+		<td class = "genre">${movie.genre}</td>
+		<td class = "duration">${movie.duration}</td>
+		<td class = "director">${movie.director}</td>
+		<td class = "price">${movie.price}</td>
+		<td class = "description">${movie.description}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${movie.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{Movies.create()}
+    #{/if}
+    #{else}
+        @{Movies.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" enctype="multipart/form-data"	 method="post" class="form-horizontal">
+					#{field 'movie.id'}
+					<input type = "hidden" name = "${field.name}" id = "movie_id"/>
+					#{/}
+					<div class="form-group">
+					#{field 'movie.title'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Title</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "movie_title" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.genre'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Genre</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "movie_genre" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.duration'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Duration</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "movie_duration" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.director'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Director</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "movie_director" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.price'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Price</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "movie_price" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.description'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Description</label>
+						<div class="col-sm-9">
+							<textarea rows="4" cols="70" type = "text" name = "${field.name}" id = "movie_description" class="form-control">
+							</textarea>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'movie.posterFile'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Poster</label>
+						<div class="col-sm-9">
+						<input type = "file" name = "${field.name}" id = "movie_poster" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+							<a href = "#">Rollback</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

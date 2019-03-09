@@ -1,0 +1,83 @@
+#{extends 'standardForm.html' /}
+#{set title:'Projection Dates' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/ProjectionDates/remove?id='+id);
+}
+
+function sync(item){
+    var id = item.find(".id").html();
+    var dateId = item.data('date-id');
+    $("#projectionDate_date").val(dateId);
+    $("#proj_times_btn").prop('href', '/projectionTimes/show?projectionDate_id=' + id);
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{ProjectionDates.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+<div class = "container-fluid">
+	<h1>Projection Dates</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Name</th>
+	</tr>
+	#{list items:projectionDates, as:'projectionDate'}
+	<tr data-date-id="${projectionDate.id}">
+		<td class="date">${projectionDate.date}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${projectionDate.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{ProjectionDates.create()}
+    #{/if}
+    #{else}
+        @{ProjectionDates.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" method="post" class="form-horizontal">
+					#{field 'projectionDate.id'}
+					<input type = "hidden" name = "${field.name}" id = "projectionDate_id"/>
+					#{/}
+					<div class="form-group">
+						<a class="btn btn-primary" id="proj_times_btn" href="#">Times</a>
+					</div>						
+					<div class="form-group">
+					#{field 'projectionDate.date'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Date</label>
+						<div class="col-sm-9">
+							<input type = "date" name = "${field.name}" id = "projectionDate_date" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

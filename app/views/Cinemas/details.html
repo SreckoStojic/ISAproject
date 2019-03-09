@@ -1,0 +1,99 @@
+#{extends '/Application/navbar.html'/}
+
+<script>
+	$(document).ready(function(){
+		$("#cinemaRate").rating().on("rating:change", function(event, value, caption) {
+	        $.ajax({
+	        	  type: "POST",
+	        	  url: "/cinemas/storeRate",
+	        	  data: {
+	        		  cinemaRate : {
+	        			  cinema : {
+	        				  id : ${cinema.id}
+	        			  },
+	        			  rate : value
+	        		  }
+	        	  },
+	        	  success: function(result){
+	        		  $("#cinemaRate").rating("update", result);
+	        	  }
+	        	});
+	    });
+	});
+</script>
+
+<div class="container">
+	<h1>${cinema.name}</h1>
+	<div class="rate">
+		<label for="cinemaRate" class="control-label">Oceni Bioskop:</label>
+		<input id="cinemaRate" name="cinemaRate" class="rating rating-loading" 
+		data-min="0" 
+		data-max="5" 
+		data-step="1" 
+		data-show-caption="false" 
+		data-show-clear="false" 
+		#{if session.get("user") == null}
+		data-readonly="true"
+		#{/if}
+		value="${cinema.calculateAverageRate()}"
+		data-size="xs"
+		>
+	</div>
+	<div class="cinema-details">
+		<p>
+		   Adresa : ${cinema.address}<br>
+		   Grad : ${cinema.city}
+		</p>
+		<p>
+		  Opis bioskopa: <br>  ${cinema.description}
+		</p>
+	</div>
+	<div class="map">
+		<iframe style="border: 0" width="600" height="300" src="//www.google.com/maps/embed/v1/place?q=${(cinema.address + cinema.city).urlEncode()}&zoom=17&key=AIzaSyA79IJ_Awi_jPGHuDgu5pMdmE1q9OraaDQ">
+     	</iframe>
+	</div>
+	<h2>Repertoar</h2>
+	<div class="container">
+		<ul class="list-items">
+		#{list items:repertoire.getMovies(), as:'movie'}
+		<li>
+			<div class="poster">
+				<img alt="" src="${movie.getPosterPath()}">
+			</div>
+			<div>
+				<h2>${movie.title}</h2>
+				<p>
+					${movie.genre}<br>
+					${movie.duration} mins
+				</p>
+			</div>
+			<div>
+				<ul>
+				#{list items:movie.getProjectionsByRepertoireId(repertoire.id), as:'projection'}
+					<li>
+					<a class="btn btn-primary btn-sm" href="@{Reservations.quickReservation(projection.id)}">
+						${projection.projectionDate.getFormatedDate()} (${projection.projectionTime.time})
+					</a>
+					</li>
+				#{/list}
+				</ul>
+			</div>
+			<div>
+				<input value="${movie.calculateAverageRate()}"  class="rating rating-loading" 
+					data-min="0" 
+					data-max="5" 
+					data-step="1" 
+					data-show-caption="false" 
+					data-show-clear="false" 
+					data-readonly="true"
+					data-size="xs"
+					>
+			</div>
+			<div class="details">
+				<a href="/movies/details?id=${movie.id}" class="btn btn-primary">Detalji</a>
+			</div>
+		</li>
+		#{/list}
+	</ul>
+	</div>
+</div>

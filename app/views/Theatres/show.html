@@ -1,0 +1,123 @@
+#{extends 'standardForm.html' /}
+#{set title:'Theatres' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/Theatres/remove?id='+id);
+}
+
+function sync(item){
+    var name = item.find(".name").html();
+    var address = item.find(".address").html();
+    var id = item.find(".id").html();
+    var city = item.find(".city").html();
+    var description = item.find(".description").html();
+    $("#theatre_id").val(id);
+    $("#theatre_name").val(name);
+    $("#theatre_address").val(address);
+    $("#theatre_city").val(city);
+    $("#theatre_description").val(description);
+    $("#theatreAuditoriums_btn").prop('href', '/theatreauditoriums/show?theatre_id=' + id);
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{Theatres.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+
+
+<div class = "container-fluid">
+	<h1>Theatres</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Name</th>
+	   <th>Address</th>
+	   <th>City</th>
+	   <th>Short Description</th>	
+	</tr>
+	#{list items:theatres, as:'theatre'}
+	<tr>
+		<td class = "name">${theatre.name}</td>
+		<td class = "address">${theatre.address}</td>
+		<td class = "city">${theatre.city}</td>
+		<td class = "description">${theatre.description}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${theatre.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{Theatres.create()}
+    #{/if}
+    #{else}
+        @{Theatres.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" method="post" class="form-horizontal">
+					#{field 'theatre.id'}
+					<input type = "hidden" name = "${field.name}" id = "theatre_id"/>
+					#{/}
+					<div class="form-group">
+						<a class="btn btn-primary" id="theatreAuditoriums_btn" href="#">Theatre Auditoriums</a>
+					</div>						
+					<div class="form-group">
+					#{field 'theatre.name'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Name</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "theatre_name" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatre.address'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Address</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "theatre_address" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatre.city'}
+						<label for = "${field.id}" class="col-sm-3 control-label">City</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "theatre_city" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'theatre.description'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Description</label>
+						<div class="col-sm-9">
+							<textarea rows="4" cols="70" type = "text" name = "${field.name}" id = "theatre_description" class="form-control">
+							</textarea>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

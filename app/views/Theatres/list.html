@@ -1,0 +1,31 @@
+#{extends '/Application/navbar.html'/}
+<div class="container">
+<h1 class="h1">Pregled Pozorista</h1>
+	<ul class="list-items">
+		#{list items:theatres, as:'theatre'}
+		<li>
+			<div>
+				<h2>${theatre.name}</h2>
+				<p>
+					${theatre.address}<br>
+					${theatre.city}
+				</p>
+			</div>
+			<div>
+				<input value="${theatre.calculateAverageRate()}"  class="rating rating-loading" 
+					data-min="0" 
+					data-max="5" 
+					data-step="1" 
+					data-show-caption="false" 
+					data-show-clear="false" 
+					data-readonly="true"
+					data-size="xs"
+					>
+			</div>
+			<div class="details">
+				<a href="/theatres/details?id=${theatre.id}" class="btn btn-primary">Detalji</a>
+			</div>
+		</li>
+		#{/list}
+	</ul>
+</div>

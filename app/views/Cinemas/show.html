@@ -1,0 +1,123 @@
+#{extends 'standardForm.html' /}
+#{set title:'Cinemas' /}
+
+<script>
+
+function remove(id){
+	$(location).attr('href','/Cinemas/remove?id='+id);
+}
+
+function sync(item){
+    var name = item.find(".name").html();
+    var address = item.find(".address").html();
+    var id = item.find(".id").html();
+    var city = item.find(".city").html();
+    var description = item.find(".description").html();
+    $("#cinema_id").val(id);
+    $("#cinema_name").val(name);
+    $("#cinema_address").val(address);
+    $("#cinema_city").val(city);
+    $("#cinema_description").val(description);
+    $("#auditoriums_btn").prop('href', '/auditoriums/show?cinema_id=' + id);
+}
+
+</script>
+
+<div>
+<ul class="action-buttons">
+  <li><a href="@{Application.index()}" id = "search"><img src="@{'/public/images/home.png'}"/></a></li>
+  <li><a href="@{Cinemas.show("add")}" id = "add"><img src="@{'/public/images/add.gif'}"/></a></li>
+  <li><a href="#" id = "remove"><img src="@{'/public/images/remove.gif'}"/></a></li>
+</ul>
+</div>
+
+
+
+<div class = "container-fluid">
+	<h1>Cinemas</h1>
+
+	<table class="table table-bordered">
+	<tr class = "header"> 
+	   <th>Name</th>
+	   <th>Address</th>
+	   <th>City</th>
+	   <th>Short Description</th>	
+	</tr>
+	#{list items:cinemas, as:'cinema'}
+	<tr>
+		<td class = "name">${cinema.name}</td>
+		<td class = "address">${cinema.address}</td>
+		<td class = "city">${cinema.city}</td>
+		<td class = "description">${cinema.description}</td>
+		<td style = "visibility: hidden; max-width: 0px" class = "id">${cinema.id}</td>
+	</tr>
+	#{/list}
+	</table>
+</div>
+
+#{set 'action'}
+    #{if mode == 'add'}
+        @{Cinemas.create()}
+    #{/if}
+    #{else}
+        @{Cinemas.edit()}
+    #{/else}
+    
+ #{/set}
+
+
+<div class = "container-fluid">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="form-wrapper row">
+				<form action = "${action}" method="post" class="form-horizontal">
+					#{field 'cinema.id'}
+					<input type = "hidden" name = "${field.name}" id = "cinema_id"/>
+					#{/}
+					<div class="form-group">
+						<a class="btn btn-primary" id="auditoriums_btn" href="#">Auditoriums</a>
+					</div>						
+					<div class="form-group">
+					#{field 'cinema.name'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Name</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "cinema_name" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'cinema.address'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Address</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "cinema_address" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'cinema.city'}
+						<label for = "${field.id}" class="col-sm-3 control-label">City</label>
+						<div class="col-sm-9">
+							<input type = "text" name = "${field.name}" id = "cinema_city" class="form-control"/>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+					#{field 'cinema.description'}
+						<label for = "${field.id}" class="col-sm-3 control-label">Description</label>
+						<div class="col-sm-9">
+							<textarea rows="4" cols="70" type = "text" name = "${field.name}" id = "cinema_description" class="form-control">
+							</textarea>
+						</div>
+					#{/}
+					</div>
+					<div class="form-group">
+						<div id = "formActions" class="col-sm-offset-3 col-sm-9">
+							<input type = "submit" value = "Submit" class="btn btn-default"/>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

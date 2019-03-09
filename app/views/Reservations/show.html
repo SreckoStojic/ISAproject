@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+	$(document).on("click", "#seats td", function() {
+		var column_num = parseInt($(this).index()) + 1;
+		var row_num = parseInt($(this).parent().index()) + 1;
+		var klasa = $(this).attr('class');
+		var cells = $('#seats').find("td");
+		if (klasa == "unavailable") {
+			alert("This seat is taken");
+			$('#submit_btn').prop("disabled", true);
+		} else {
+			$(this).css('background-color', '#D3D3D3');
+			$('#submit_btn').prop("disabled", false);						
+			
+			var html = "<option value="+row_num+" selected></option>"
+			$("#reservation_seats_row").append(html);
+
+			var html = "<option value="+column_num+" selected></option>"
+			$("#reservation_seats_numbers").append(html);
+		}
+	});
+
+	$(document)
+			.ready(
+					function() {
+						$('#date_id').on(
+								'change',
+								function(e) {
+									var dateId = $(this).val();
+									var times = $(this).find(
+											'option[value=' + dateId + ']')
+											.data('times');
+									var options = times.map(function(t) {
+										return '<option value="' + t.id + '">'
+												+ t.time + '</option>';
+									});
+
+									$('#time_id').html(options);
+								});
+
+						$('#cinema_id')
+								.on(
+										'change',
+										function(e) {
+											var cinemaId = $(this).val();
+											var movies = $(this).find(
+													'option[value=' + cinemaId
+															+ ']').data(
+													'movies');
+											var options = movies
+													.map(function(t) {
+														return '<option value="' + t.id + '">'
+																+ t.title
+																+ '</option>';
+													});
+											var rep_id = movies
+													.map(function(t) {
+														return t.repertoire_id;
+													});
+											var movie_id = movies.map(function(
+													t) {
+												return t.id;
+											});
+											$('#movie_id').html(options);
+											document
+													.getElementById("search_cinemas").style.display = "none";
+											document
+													.getElementById("search_movies").style.display = "block";
+										});
+
+						$('#aud_id_choose')
+								.on(
+										'change',
+										function(e) {
+											var audId = $(this).val();
+											$('#aud_id').val(audId);
+											var obj = $(this).find(
+													'option[value=' + audId
+															+ ']')
+													.data('seats');
+
+											$("#seats").empty();
+											var rows = obj.rows;
+											var cols = obj.cols;
+											var seats = obj.seats;
+											var html = '';
+											for (i = 0; i < rows; i++) {
+												html = html + "<tr>"
+												for (j = 0; j < cols; j++) {
+
+													var num = i + " " + j;
+													if (seats[i * rows + j].available == true) {
+														html = html
+																+ "<td bgcolor='#90EE90' class='available' style='border: 1px solid black;'>"
+																+ num + "</td>"
+													} else {
+
+														html = html
+																+ "<td bgcolor='#F08080' class='unavailable' style='border: 1px solid black;'>"
+																+ num + "</td>"
+													}
+												}
+												html = html + "</tr>"
+											}
+											$("#seats").append(html);
+
+										});
+					});
+
+	function show_date() {
+
+		document.getElementById("choose_date").style.display = "block";
+		document.getElementById("choose_time").style.display = "block";
+	}
+
+	function show_seats() {
+		document.getElementById("choose_date").style.display = "block";
+		document.getElementById("choose_time").style.display = "block";
+		document.getElementById("choose_auditorium").style.display = "block";
+		document.getElementById("choose_seat").style.display = "block";
+		document.getElementById("submit_btn").disabled = true;
+	}
+
+	function searchCinemas() {
+		var input, filter, select, options, i;
+		input = document.getElementById("search_cinemas");
+		filter = input.value.toUpperCase();
+		select = document.getElementById("cinema_id");
+		options = select.getElementsByTagName("option");
+		for (i = 0; i < options.length; i++) {
+			if (options[i].innerHTML.toUpperCase().startsWith(filter)) {
+				options[i].style.display = "";
+				select.selectedIndex = i;
+			} else {
+				options[i].style.display = "none";
+			}
+		}
+	}
+
+	function searchMovies() {
+		var input, filter, select, options, i;
+		input = document.getElementById("search_movies");
+		filter = input.value.toUpperCase();
+		select = document.getElementById("movie_id");
+		options = select.getElementsByTagName("option");
+		for (i = 0; i < options.length; i++) {
+			if (options[i].innerHTML.toUpperCase().startsWith(filter)) {
+				options[i].style.display = "";
+				select.selectedIndex = i;
+			} else {
+				options[i].style.display = "none";
+
+			}
+		}
+	}
+</script>
+<style type="text/css">
+.list-group-horizontal .list-group-item {
+	display: inline-block;
+}
+
+.list-group-horizontal .list-group-item {
+	margin-bottom: 0;
+	margin-left: -4px;
+	margin-right: 0;
+}
+
+.list-group-horizontal .list-group-item:first-child {
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 4px;
+}
+
+.list-group-horizontal .list-group-item:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-left-radius: 0;
+}
+</style>
+</head>
+
+#{set 'action'} #{if mode == 'initial'} @{Reservations.next()} #{/if}
+#{if mode == 'next'} @{Reservations.getSeat()} #{/if} #{if mode ==
+'seats'} @{Reservations.create()} #{/if} #{/set} #{set 'back'} #{if mode
+== 'next'} @{Reservations.show()} #{/if} #{if mode == 'seats'}
+@{Reservations.next(cinema_id, movie_id) } #{/if} #{/set} #{set 'func'}
+#{if mode == 'next'} show_date() #{/if} #{if mode == 'seats'}
+show_seats(); #{/if} #{/set}
+<body onload="${func}">
+	<div class="container">
+
+
+		<div class="col-md-8 col-md-offset-3">
+			<div class="row" style="padding-top: 50px">
+
+				<div class="list-group list-group-horizontal">
+					<a href="@{Application.index()}" class="active list-group-item"
+						id="index">ISA</a> <a href="@{Users.show()}"
+						class="list-group-item" id="home-form-link">Profile page</a> <a
+						href="@{Users.logout()}" id="settings-form-link"
+						class="list-group-item">Logout</a>
+				</div>
+
+			</div>
+
+			<div class="container-fluid">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="form-wrapper row">
+							<form action="${action}" enctype="multipart/form-data"
+								method="post" class="form-horizontal">
+
+								<input type="hidden" name="rep_id" id="rep_id" value="${rep_id}" />
+								<input type="hidden"
+									name="aud_id" id="aud_id" value="${aud_id}" /> <input
+									class="form-control mr-sm-2" type="search" placeholder="Search"
+									aria-label="Search" id="search_cinemas"
+									onkeyup="searchCinemas()" style="display: block;"> <input
+									class="form-control mr-sm-2" type="search" placeholder="Search"
+									aria-label="Search" id="search_movies" onkeyup="searchMovies()"
+									style="display: none;">
+								<div class="form-group" id="choose_cinema"
+									style="display: block;">
+									<label for="cinema_id" class="col-sm-3 control-label">Cinema</label>
+									<div class="col-sm-6">
+										<select name="cinema_id" id="cinema_id" class="form-control" />
+										#{list items:cinemas, as:'cinema'}
+										<option value="${cinema.id}"
+											data-movies="${cinema.getMoviesJSON()}">${cinema.name}</option>
+										#{/list} </select>
+									</div>
+								</div>
+								<div class="form-group" id="choose_movie"
+									style="display: block;">
+									<label for="movie_id" class="col-sm-3 control-label">Movie</label>
+									<div class="col-sm-6">
+										<select name="movie_id" id="movie_id" class="form-control" />
+										#{list items:movies, as:'movie'}
+										<option value="${movie.id}">${movie.title}</option>
+										#{/list} </select>
+									</div>
+								</div>
+								<div class="form-group" id="choose_date" style="display: none;">
+									<label for="date_id" class="col-sm-3 control-label">Projection
+										Date</label>
+									<div class="col-sm-6">
+										<select name="date_id" id="date_id" class="form-control" />
+										#{list items:projectionDates, as:'projectionDate'}
+										<option value="${projectionDate.id}"
+											data-times="${projectionDate.getProjectionTimesJSON()}">${projectionDate.date}</option>
+										#{/list} </select>
+									</div>
+								</div>
+								<div class="form-group" id="choose_time" style="display: none;">
+									<label for="time_id" class="col-sm-3 control-label">Projection
+										Time</label>
+									<div class="col-sm-6">
+										<select name="time_id" id="time_id" class="form-control" />
+										#{list items:projectionTimes, as:'projectionTime'}
+										<option value="${projectionTime.id}">${projectionTime.time}</option>
+										#{/list} </select>
+									</div>
+								</div>
+								<div class="form-group" id="choose_auditorium"
+									style="display: none;">
+									<label for="aud_id" class="col-sm-3 control-label">Auditorium</label>
+									<div class="col-sm-6">
+										<select name="aud_id_choose" id="aud_id_choose"
+											class="form-control" /> #{list items:auditoriums,
+										as:'auditorium'}
+										<option value="${auditorium.id}"
+											data-seats="${auditorium.getSeatsJSON()}">${auditorium.name}</option>
+										#{/list} </select>
+									</div>
+								</div>
+
+								<div class="form-group" id="choose_seat" style="display: none;">
+									<table id="seats" style="border: 1px solid black;">
+									</table>
+									<div class="col-md-7" style="display: none;">
+										<select multiple name="seat_rows" id="reservation_seats_row">
+											#{list items:seat_rows, as:'seat_row'}
+											<option value="${seat_row}"></option> 
+											#{/list}
+										</select>
+									</div>
+									<div class="col-md-7" style="display: none;">
+										<select multiple name="seat_numbers" id="reservation_seats_numbers">
+											#{list items:seat_numbers, as:'seat_number'}
+											<option value="${seat_number}"></option> 
+											#{/list}
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="price" class="col-sm-3 control-label">Price</label>
+									<div class="col-sm-6">
+										<input readonly type="text" name="price" id="price"
+											class="form-control" value="${price}" />
+									</div>
+								</div>
+								<div class="form-group">
+									<div id="formActions" class="col-sm-offset-3 col-sm-9">
+										<input type="submit" id="submit_btn" value="Next"
+											class="btn btn-default" /> <a href="${back}">Back</a> <a
+											href="@{Reservations.drop()}">Drop</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
